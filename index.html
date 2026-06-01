@@ -1,12 +1,405 @@
 <!DOCTYPE html>
-<html dir="rtl" lang="ar">
-  <head>
-   <title>الاستعلام عن الرواتب - مديرية غاز الجنوب</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <base target="_top">
-  </head>
-  <body>
-    <iframe style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: 0;" src="https://spc-salary.github.io/salary"></iframe>
-  </body>
-</html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة التحكم وموسوعة البيانات</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <style>
+        body {
+            font-family: 'Cairo', sans-serif;
+            background-color: #f4f6f9;
+        }
+        .custom-shadow {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+        }
+    </style>
+</head>
+<body class="text-gray-800 antialiased min-h-screen flex flex-col">
 
+    <header class="bg-gradient-to-r from-blue-700 to-indigo-800 text-white shadow-lg py-5 px-6">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
+            <div>
+                <h1 class="text-2xl font-bold tracking-wide">نظام إدارة وموسوعة Google Sheets</h1>
+                <p class="text-blue-100 text-sm mt-1">لوحة تحكم ديناميكية متصلة عبر Sheet.best لعمليات القراءة، الإضافة، التعديل، والحذف</p>
+            </div>
+            <div class="bg-white/10 backdrop-blur-md px-4 py-2 rounded-lg border border-white/20 text-xs max-w-md truncate">
+                <span class="font-semibold text-blue-200">رابط الـ API:</span> 
+                <span id="api-url-display" class="font-mono text-white select-all">https://api.sheetbest.com/sheets/e2b69368-c3e2-46f9-a782-09b3bbfc7370</span>
+            </div>
+        </div>
+    </header>
+
+    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 space-y-6">
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="bg-white p-6 rounded-xl border border-gray-200 custom-shadow md:col-span-2">
+                <div class="flex justify-between items-center mb-4 pb-2 border-b border-gray-100">
+                    <h2 id="form-title" class="text-lg font-bold text-gray-700 flex items-center gap-2">
+                        <span class="inline-block w-3 h-3 bg-blue-600 rounded-full"></span>
+                        إضافة سطر بيانات جديد
+                    </h2>
+                    <button id="cancel-edit-btn" onclick="resetForm()" class="hidden text-xs bg-gray-100 hover:bg-gray-200 text-gray-600 px-3 py-1.5 rounded-lg transition">
+                        إلغاء التعديل
+                    </button>
+                </div>
+                
+                <form id="data-form" onsubmit="handleFormSubmit(event)" class="space-y-4">
+                    <div id="dynamic-inputs" class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div class="col-span-full text-center py-4 text-gray-400 text-sm">جاري قراءة بنية الأعمدة الحالية...</div>
+                    </div>
+
+                    <div class="flex flex-wrap items-center justify-between pt-4 border-t border-gray-100 gap-3">
+                        <button type="submit" id="submit-btn" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition shadow-sm text-sm">
+                            حفظ البيانات
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="bg-white p-6 rounded-xl border border-gray-200 custom-shadow flex flex-col justify-between">
+                <div>
+                    <div class="mb-4 pb-2 border-b border-gray-100">
+                        <h2 class="text-lg font-bold text-gray-700 flex items-center gap-2">
+                            <span class="inline-block w-3 h-3 bg-indigo-600 rounded-full"></span>
+                            إضافة عمود جديد للشيت
+                        </h2>
+                        <p class="text-xs text-gray-400 mt-1">عند إضافة اسم عمود جديد، سيظهر فوراً كحقل إدخال وسيتم إنشاؤه في ملف الـ Google Sheets عند حفظ السطر القادم.</p>
+                    </div>
+                    <div class="space-y-3">
+                        <div>
+                            <label class="block text-xs font-semibold text-gray-500 mb-1">اسم العمود (يفضل بالإنجليزية وبدون مسافات):</label>
+                            <input type="text" id="new-column-name" placeholder="مثال: Notes أو Phone" class="w-full border border-gray-300 rounded-lg p-2 text-sm focus:ring-2 focus:ring-indigo-500 focus:outline-none">
+                        </div>
+                    </div>
+                </div>
+                <div class="pt-4">
+                    <button onclick="addNewColumnField()" class="w-full bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-bold px-4 py-2 rounded-lg transition text-sm border border-indigo-200">
+                        + إدراج كعمود مؤقت في النموذج
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="bg-white rounded-xl border border-gray-200 custom-shadow overflow-hidden">
+            <div class="p-6 border-b border-gray-100 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+                <div>
+                    <h2 class="text-lg font-bold text-gray-700">موسوعة البيانات الحالية</h2>
+                    <p class="text-xs text-gray-400 mt-0.5">يتم جلب هذه البيانات حياً ومباشرة من جدول بيانات جوجل الخاص بك</p>
+                </div>
+                <button onclick="fetchData()" class="bg-gray-800 hover:bg-gray-900 text-white text-xs font-semibold px-4 py-2 rounded-lg transition flex items-center gap-2">
+                    🔄 تحديث البيانات يدوياً
+                </button>
+            </div>
+
+            <div class="overflow-x-auto w-full">
+                <table class="w-full text-right border-collapse">
+                    <thead>
+                        <tr id="table-headers" class="bg-gray-50 border-b border-gray-200 text-xs font-bold text-gray-500 tracking-wider">
+                            </tr>
+                    </thead>
+                    <tbody id="table-rows" class="divide-y divide-gray-100 text-sm text-gray-600">
+                        <tr>
+                            <td class="text-center py-8 text-gray-400">جاري تحميل البيانات من الشيت...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-white border-t border-gray-200 py-4 px-6 text-center text-xs text-gray-400 mt-auto">
+        نظام ربط وإدارة محتوى الموسوعة الذكي &copy; 2026. متصل بنجاح مع سيرفرات Sheet.best وعبر استضافة GitHub Pages الثابتة.
+    </footer>
+
+    <script>
+        const API_URL = 'https://api.sheetbest.com/sheets/e2b69368-c3e2-46f9-a782-09b3bbfc7370';
+        
+        let currentData = [];       // لتخزين البيانات القادمة من السيرفر
+        let sheetColumns = [];      // لتخزين أسماء الأعمدة المكتشفة من الشيت
+        let isEditing = false;      // مؤشر حالة التعديل
+        let editRowIndex = null;    // رقم السطر المراد تعديله
+
+        // استدعاء دالة جلب البيانات بمجرد اكتمال تحميل الصفحة
+        window.onload = function() {
+            fetchData();
+        };
+
+        // 1. جلب البيانات من Google Sheets عبر واجهة Sheet.best
+        async function fetchData() {
+            showLoading('جاري جلب أحدث البيانات من جوجل شيت...');
+            try {
+                const response = await fetch(API_URL);
+                if (!response.ok) throw new Error('فشل الاتصال بـ API');
+                
+                currentData = await response.json();
+                
+                // استخراج الأعمدة المتاحة ديناميكياً بناءً على مفاتيح أول كائن متوفر
+                if (currentData && currentData.length > 0) {
+                    sheetColumns = Object.keys(currentData[0]);
+                } else {
+                    // إذا كان الشيت فارغاً تماماً نضع أعمدة افتراضية لبدء العمل عليها وتأسيسها
+                    sheetColumns = ['ID', 'Title', 'Description'];
+                }
+
+                renderHeaders();
+                renderInputsForm();
+                renderTableData();
+                Swal.close();
+            } catch (error) {
+                console.error(error);
+                Swal.fire({
+                    icon: 'error',
+                    title: 'خطأ في جلب البيانات',
+                    text: 'تأكد من صلاحيات مشاركة الملف (أي شخص لديه الرابط يمكنه العرض) أو صلاحية أداة Sheet.best.',
+                    confirmButtonText: 'حسناً'
+                });
+            }
+        }
+
+        // 2. بناء رؤوس الجدول ديناميكياً حسب الأعمدة المكتشفة
+        function renderHeaders() {
+            const headerRow = document.getElementById('table-headers');
+            headerRow.innerHTML = '';
+            
+            // إضافة رقم تسلسلي للمظهر والترتيب
+            const thIndex = document.createElement('th');
+            thIndex.className = 'p-3 text-center w-16';
+            thIndex.innerText = '#';
+            headerRow.appendChild(thIndex);
+
+            // إضافة أعمدة الشيت الحالية
+            sheetColumns.forEach(col => {
+                const th = document.createElement('th');
+                th.className = 'p-3';
+                th.innerText = col;
+                headerRow.appendChild(th);
+            });
+
+            // عمود العمليات والتحكم
+            const thActions = document.createElement('th');
+            thActions.className = 'p-3 text-center w-32';
+            thActions.innerText = 'العمليات والتعديل';
+            headerRow.appendChild(thActions);
+        }
+
+        // 3. بناء نموذج حقول المدخلات ديناميكياً بناء على الأعمدة المتاحة
+        function renderInputsForm() {
+            const inputsContainer = document.getElementById('dynamic-inputs');
+            inputsContainer.innerHTML = '';
+
+            sheetColumns.forEach(col => {
+                const div = document.createElement('div');
+                div.className = 'space-y-1';
+                div.innerHTML = `
+                    <label class="block text-xs font-bold text-gray-600">${col}</label>
+                    <input type="text" name="${col}" id="input-${col}" placeholder="أدخل قيمة ${col}" 
+                           class="w-full border border-gray-200 rounded-lg p-2 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none bg-gray-50 focus:bg-white transition">
+                `;
+                inputsContainer.appendChild(div);
+            });
+        }
+
+        // 4. تعبئة وعرض البيانات في الجدول الحركي
+        function renderTableData() {
+            const tbody = document.getElementById('table-rows');
+            tbody.innerHTML = '';
+
+            if (currentData.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="${sheetColumns.length + 2}" class="text-center py-8 text-gray-400">لا توجد بيانات داخل الجدول حالياً. أضف أول سطر الآن!</td></tr>`;
+                return;
+            }
+
+            currentData.forEach((row, index) => {
+                const tr = document.createElement('tr');
+                tr.className = 'hover:bg-gray-50/80 transition';
+                
+                // الرقم التسلسلي للمظهر النظيف
+                let tds = `<td class="p-3 text-center text-xs font-mono text-gray-400 font-semibold bg-gray-50/50">${index + 1}</td>`;
+                
+                // جلب قيم الأعمدة بالترتيب والمطابقة
+                sheetColumns.forEach(col => {
+                    const value = row[col] !== undefined ? row[col] : '-';
+                    tds += `<td class="p-3 font-medium text-gray-700">${value}</td>`;
+                });
+
+                // أزرار التحكم والعمليات (تعديل / حذف)
+                tds += `
+                    <td class="p-3 text-center space-x-1 space-x-reverse">
+                        <button onclick="startEdit(${index})" class="text-xs bg-amber-50 hover:bg-amber-100 text-amber-700 font-bold px-2.5 py-1.5 rounded transition border border-amber-200">
+                            تعديل
+                        </button>
+                        <button onclick="deleteRow(${index})" class="text-xs bg-red-50 hover:bg-red-100 text-red-600 font-bold px-2.5 py-1.5 rounded transition border border-red-200">
+                            حذف
+                        </button>
+                    </td>
+                `;
+                tr.innerHTML = tds;
+                tbody.appendChild(tr);
+            });
+        }
+
+        // 5. إضافة حقل عمود جديد بشكل مؤقت في استمارة الـ HTML استعداداً لرفعه
+        function addNewColumnField() {
+            const newColInput = document.getElementById('new-column-name');
+            const columnName = newColInput.value.trim();
+
+            if (!columnName) {
+                Swal.fire({ icon: 'warning', title: 'تنبيه', text: 'يرجى كتابة اسم العمود أولاً!', confirmButtonText: 'موافق' });
+                return;
+            }
+
+            if (sheetColumns.includes(columnName)) {
+                Swal.fire({ icon: 'error', title: 'موجود مسبقاً', text: 'هذا العمود موجود بالفعل في هيكلية الجدول الحالية.', confirmButtonText: 'موافق' });
+                return;
+            }
+
+            // إضافة العمود للمصفوفة المحلية وإعادة بناء الفورمة والجدول لتشمل العمود الجديد
+            sheetColumns.push(columnName);
+            renderHeaders();
+            renderInputsForm();
+            renderTableData();
+
+            newColInput.value = '';
+            Swal.fire({
+                icon: 'success',
+                title: 'تم إدراج العمود بنجاح',
+                text: `تمت إضافة العمود "${columnName}" إلى واجهة الإدخال. سيتم رفع الهيكل وإنشاؤه رسمياً في ملف جوجل شيت بمجرد إرسالك للبيانات التالية.`,
+                confirmButtonText: 'رائع'
+            });
+        }
+
+        // 6. تفعيل وضع التعديل لسطر معين وسحب بياناته للفورمة العلوية
+        function startEdit(index) {
+            isEditing = true;
+            editRowIndex = index;
+            const rowData = currentData[index];
+
+            document.getElementById('form-title').innerHTML = `<span class="inline-block w-3 h-3 bg-amber-500 rounded-full"></span> تعديل السطر رقم ${index + 1}`;
+            document.getElementById('submit-btn').innerText = 'تحديث السطر في جوجل';
+            document.getElementById('submit-btn').className = 'bg-amber-500 hover:bg-amber-600 text-white font-semibold px-6 py-2 rounded-lg transition shadow-sm text-sm';
+            document.getElementById('cancel-edit-btn').classList.remove('hidden');
+
+            // تعبئة المدخلات بقيم السطر المختار برمجياً
+            sheetColumns.forEach(col => {
+                const inputElement = document.getElementById(`input-${col}`);
+                if (inputElement) {
+                    inputElement.value = rowData[col] !== undefined ? rowData[col] : '';
+                }
+            });
+
+            // التمرير لأعلى لعرض الاستمارة بسلاسة للمستخدم
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        // 7. إلغاء التعديل وإرجاع الفورمة لوضع الإدخال العادي الحفظ
+        function resetForm() {
+            isEditing = false;
+            editRowIndex = null;
+            document.getElementById('data-form').reset();
+            document.getElementById('form-title').innerHTML = `<span class="inline-block w-3 h-3 bg-blue-600 rounded-full"></span> إضافة سطر بيانات جديد`;
+            document.getElementById('submit-btn').innerText = 'حفظ البيانات';
+            document.getElementById('submit-btn').className = 'bg-blue-600 hover:bg-blue-700 text-white font-semibold px-6 py-2 rounded-lg transition shadow-sm text-sm';
+            document.getElementById('cancel-edit-btn').classList.add('hidden');
+        }
+
+        // 8. معالجة إرسال الفورمة (إما إضافة سطر جديد أو تعديل سطر موجود عبر الـ API)
+        async function handleFormSubmit(event) {
+            event.preventDefault();
+            
+            // تجميع البيانات من عناصر الإدخال الحالية بشكل ديناميكي كامل حسب الهيكل
+            const formData = {};
+            sheetColumns.forEach(col => {
+                const inputVal = document.getElementById(`input-${col}`).value;
+                formData[col] = inputVal;
+            });
+
+            if (isEditing) {
+                // حالة التعديل: إرسال طلب PUT لسطر معين عبر الفهرس المباشر للمصفوفة
+                showLoading('جاري تحديث السطر وحفظ التعديلات في جوجل...');
+                try {
+                    const response = await fetch(`${API_URL}/${editRowIndex}`, {
+                        method: 'PUT',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(formData)
+                    });
+
+                    if (!response.ok) throw new Error('فشل تحديث البيانات');
+
+                    Swal.fire({ icon: 'success', title: 'تم التعديل', text: 'تم تحديث البيانات وتعديل السطر في Google Sheets بنجاح!', timer: 2000, showConfirmButton: false });
+                    resetForm();
+                    fetchData();
+                } catch (error) {
+                    console.error(error);
+                    Swal.fire({ icon: 'error', title: 'خطأ برمي', text: 'لم نتمكن من تعديل البيانات، تأكد من سلامة الاتصال وسيرفر الأداة.' });
+                }
+            } else {
+                // حالة الإضافة: إرسال طلب POST عادي لرفع سطر بيانات جديد
+                showLoading('جاري حفظ البيانات الجديدة وإدراجها في الشيت...');
+                try {
+                    const response = await fetch(API_URL, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify([formData]) // تطلب Sheet.best تمرير مصفوفة كائنات لضمان التوافق وحفظ الأعمدة المحدثة تلقائياً
+                    });
+
+                    if (!response.ok) throw new Error('فشل إرسال البيانات');
+
+                    Swal.fire({ icon: 'success', title: 'تم الحفظ', text: 'تمت إضافة البيانات الجديدة وحفظ بنية الأعمدة بنجاح!', timer: 2000, showConfirmButton: false });
+                    document.getElementById('data-form').reset();
+                    fetchData();
+                } catch (error) {
+                    console.error(error);
+                    Swal.fire({ icon: 'error', title: 'خطأ', text: 'لم نتمكن من حفظ البيانات الجديدة بنجاح.' });
+                }
+            }
+        }
+
+        // 9. دالة حذف سطر معين نهائياً من الجدول والملف عبر السيرفر
+        function deleteRow(index) {
+            Swal.fire({
+                title: 'هل أنت متأكد من الحذف؟',
+                text: `أنت على وشك حذف السطر رقم ${index + 1} نهائياً ومسحه من ملف الـ Google Sheets المرتبط برابط الـ API!`,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#d33',
+                cancelButtonColor: '#3085d6',
+                confirmButtonText: 'نعم، احذفه!',
+                cancelButtonText: 'إلغاء'
+            }).then(async (result) => {
+                if (result.isConfirmed) {
+                    showLoading('جاري معالجة طلب الحذف من جوجل شيت...');
+                    try {
+                        const response = await fetch(`${API_URL}/${index}`, {
+                            method: 'DELETE'
+                        });
+
+                        if (!response.ok) throw new Error('فشل عملية الحذف');
+
+                        Swal.fire({ icon: 'success', title: 'تم الحذف', text: 'تم إزالة السطر بنجاح ومزامنة الجدول المفتوح.', timer: 2000, showConfirmButton: false });
+                        fetchData();
+                    } catch (error) {
+                        console.error(error);
+                        Swal.fire({ icon: 'error', title: 'فشل الحذف', text: 'حدث خطأ أثناء معالجة طلب مسح السطر من الخادم.' });
+                    }
+                }
+            });
+        }
+
+        // دالة مساعدة لإظهار واجهة لودر التحميل المنبثق لحماية العمليات المزامنة
+        function showLoading(msg) {
+            Swal.fire({
+                title: msg,
+                allowOutsideClick: false,
+                didOpen: () => {
+                    Swal.showLoading();
+                }
+            });
+        }
+    </script>
+</body>
+</html>
