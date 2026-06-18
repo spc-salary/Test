@@ -1,469 +1,168 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>دليل مدينة حمص المفتوح للخدمات والمهن</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <title>Minimalist Pomodoro</title>
     <style>
+        :root {
+            --bg: #e0e5ec;
+            --accent: #6d5dfc;
+            --shadow: #a3b1c6;
+            --light: #ffffff;
+        }
+
         body {
-            font-family: 'Cairo', sans-serif;
-            background-color: #f8fafc;
+            background-color: var(--bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            transition: background 1s ease;
         }
-        .active-tab {
-            background-color: #1e40af;
-            color: white;
-            box-shadow: 0 4px 6px -1px rgba(30, 64, 175, 0.2);
+
+        .container {
+            width: 350px;
+            padding: 30px;
+            border-radius: 30px;
+            background: var(--bg);
+            box-shadow: 20px 20px 60px var(--shadow), -20px -20px 60px var(--light);
+            text-align: center;
         }
+
+        #timer-display {
+            font-size: 4rem;
+            font-weight: 800;
+            color: #444;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+            margin: 20px 0;
+        }
+
+        #controls {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            border: none;
+            outline: none;
+            padding: 15px;
+            border-radius: 15px;
+            background: var(--bg);
+            box-shadow: 6px 6px 12px var(--shadow), -6px -6px 12px var(--light);
+            cursor: pointer;
+            font-weight: 600;
+            color: #666;
+            transition: all 0.2s ease;
+        }
+
+        button:active {
+            box-shadow: inset 4px 4px 8px var(--shadow), inset -4px -4px 8px var(--light);
+            color: var(--accent);
+        }
+
+        .task-input {
+            width: 80%;
+            padding: 12px;
+            border: none;
+            border-radius: 10px;
+            background: var(--bg);
+            box-shadow: inset 4px 4px 8px var(--shadow), inset -4px -4px 8px var(--light);
+            outline: none;
+            margin-bottom: 20px;
+        }
+
+        #task-list {
+            list-style: none;
+            padding: 0;
+            text-align: left;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        .task-item {
+            padding: 10px;
+            margin: 5px 0;
+            border-radius: 8px;
+            background: var(--bg);
+            box-shadow: 3px 3px 6px var(--shadow);
+            font-size: 0.9rem;
+            color: #555;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .working { --bg: #f0e4e4; }
     </style>
 </head>
-<body class="text-gray-800 min-h-screen flex flex-col">
+<body>
 
-    <header class="bg-gradient-to-r from-blue-800 to-indigo-900 text-white shadow-md py-6 px-4">
-        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-center gap-4">
-            <div class="text-center md:text-right">
-                <h1 class="text-3xl font-bold tracking-wide flex items-center justify-center md:justify-start gap-2">
-                    <span>📍</span> دليل مدينة حمص الخدمي والتجاري
-                </h1>
-                <p class="text-blue-200 text-sm mt-1">منصة مفتوحة المصدر تتيح لجميع الأهالي إضافة الأطباء، المحامين، الصيدليات، والمحلات ومشاركتها فورياً</p>
-            </div>
-            <div class="bg-emerald-500/10 border border-emerald-500/30 rounded-lg px-4 py-2 text-center">
-                <span class="text-emerald-400 font-semibold text-xs block">🔒 وضع الحماية نشط</span>
-                <span class="text-white text-[11px]">الإضافة مفتوحة للعموم - ميزة الحذف معطلة نهائياً</span>
-            </div>
+    <div class="container" id="app">
+        <div style="font-size: 0.8rem; letter-spacing: .2px; color: #888;">FOCUS FLOW</div>
+        <div id="timer-display">25:00</div>
+        <div id="controls">
+            <button id="start">Start</button>
+            <button id="reset">Reset</button>
         </div>
-    </header>
-
-    <main class="flex-grow max-w-7xl w-full mx-auto p-4 md:p-6 space-y-8">
-
-        <div class="bg-blue-50 border-r-4 border-blue-600 p-4 rounded-l-xl shadow-sm">
-            <div class="flex items-start gap-3">
-                <span class="text-xl">💡</span>
-                <p class="text-xs text-blue-800 leading-relaxed">
-                    إذا لم تجد القسم المناسب لعملك أو منشأتك، يمكنك اختيار <b>"إضافة قسم جديد"</b> مباشرة من استمارة الإدخال أدناه. سيقوم النظام ببناء القسم وتوليد تبويب خاص به في واجهة الموقع تلقائياً بمجرد ضغطك على حفظ!
-                </p>
-            </div>
-        </div>
-
-        <section class="bg-white rounded-2xl border border-gray-100 shadow-sm p-6">
-            <div class="border-b border-gray-100 pb-3 mb-4">
-                <h2 class="text-lg font-bold text-gray-700 flex items-center gap-2">
-                    <span class="p-1 bg-blue-100 text-blue-700 rounded">➕</span> إضافة منشأة / طبيب / مكتب / محل جديد
-                </h2>
-            </div>
-
-            <form id="directory-form" onsubmit="handleFormSubmit(event)" class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">الاسم التجاري / اسم المهني *</label>
-                    <input type="text" id="Name" required placeholder="مثال: د. أحمد فلان - عيادة الأطفال" class="w-full border border-gray-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">القسم الرئيسي الرئيسي *</label>
-                    <select id="MainCategory" onchange="toggleNewMainCategoryInput()" class="w-full border border-gray-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                        </select>
-                    <input type="text" id="NewMainCategory" placeholder="اكتب اسم القسم الرئيسي الجديد هنا" class="hidden mt-2 w-full border border-amber-300 bg-amber-50/50 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none transition">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">التصنيف الفرعي / التخصص *</label>
-                    <select id="SubCategory" onchange="toggleNewSubCategoryInput()" class="w-full border border-gray-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                        </select>
-                    <input type="text" id="NewSubCategory" placeholder="اكتب اسم التخصص أو القسم الفرعي هنا" class="hidden mt-2 w-full border border-amber-300 bg-amber-50/50 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-amber-500 focus:outline-none transition">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">العنوان في حمص *</label>
-                    <input type="text" id="Address" required placeholder="مثال: الإنشاءات - شارع البرازيل - قرب دوار بابل" class="w-full border border-gray-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">رقم الهاتف أو الجوال للتواصل</label>
-                    <input type="text" id="Phone" placeholder="مثال: 0312xxxxxx أو 09xxxxxxxx" class="w-full border border-gray-200 rounded-xl p-2.5 text-sm text-left" dir="ltr">
-                </div>
-
-                <div>
-                    <label class="block text-xs font-bold text-gray-600 mb-1">أوقات الدوام / ملاحظات هامة</label>
-                    <input type="text" id="Notes" placeholder="مثال: من السبت للأربعاء (4 عصراً - 8 مساءً)" class="w-full border border-gray-200 rounded-xl p-2.5 text-sm focus:ring-2 focus:ring-blue-500 focus:outline-none transition">
-                </div>
-
-                <div class="md:col-span-3 flex justify-end pt-2">
-                    <button type="submit" class="w-full md:w-auto bg-blue-700 hover:bg-blue-800 text-white font-bold px-8 py-3 rounded-xl transition shadow-md text-sm">
-                        🚀 حفظ وإدراج في الدليل العام
-                    </button>
-                </div>
-            </form>
-        </section>
-
-        <section class="space-y-4">
-            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 pb-2 border-b border-gray-200">
-                <div>
-                    <h2 class="text-xl font-bold text-gray-800">تصفح أقسام الدليل الحالية</h2>
-                    <p class="text-xs text-gray-400 mt-0.5">انقر على أي قسم لعرض جهات الاتصال المسجلة داخله فوراً</p>
-                </div>
-                <button onclick="fetchGuideData()" class="text-xs bg-gray-800 hover:bg-gray-900 text-white font-semibold px-4 py-2 rounded-xl transition">
-                    🔄 تحديث ومزامنة البيانات
-                </button>
-            </div>
-
-            <div id="main-tabs-container" class="flex flex-wrap gap-2">
-                </div>
-
-            <div id="sub-filters-container" class="flex flex-wrap gap-1.5 pt-2">
-                </div>
-        </section>
-
-        <section>
-            <div id="directory-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                <div class="col-span-full text-center py-12 text-gray-400 text-sm">جاري جلب محتويات الدليل وقراءة الأقسام...</div>
-            </div>
-        </section>
-
-    </main>
-
-    <footer class="bg-white border-t border-gray-200 py-4 px-6 text-center text-xs text-gray-400 mt-auto">
-        دليل مدينة حمص المفتوح والتشاركي المطور &copy; 2026. مدعوم برمجياً بقواعد بيانات جوجل المتزامنة حياً.
-    </footer>
+        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?">
+        <ul id="task-list"></ul>
+    </div>
 
     <script>
-        const API_URL = 'https://api.sheetbest.com/sheets/d5c48739-6761-4ac4-8626-bd3205eb64c5';
-        
-        let fullDatabase = [];
-        let uniqueMainCategories = [];
-        let activeMainTab = 'الكل';
-        let activeSubFilter = 'الكل';
+        let timeLeft = 25 * 60;
+        let timerId = null;
+        const display = document.getElementById('timer-display');
+        const startBtn = document.getElementById('start');
+        const taskInput = document.getElementById('task-input');
+        const taskList = document.getElementById('task-list');
 
-        // قائمة افتراضية للأقسام عند بداية تشغيل الملف لأول مرة إذا كان الإكسل فارغاً تماماً
-        const defaultMainCategories = ['القطاع الطبي', 'المهن الحرة والاستشارات', 'التسوق والتجارة', 'مطاعم ومقاهي', 'خدمات عامة وحرفية'];
-        const defaultSubCategories = {
-            'القطاع الطبي': ['طبيب أطفال', 'طبيب عظمية', 'صيدلية', 'مخبر تحاليل'],
-            'المهن الحرة والاستشارات': ['مكتب محاماة', 'مكتب هندسي', 'ترجمة محلفة'],
-            'التسوق والتجارة': ['سوبرماركت', 'مول تجاري', 'محلات ألبسة'],
-            'مطاعم ومقاهي': ['مطعم وجبات سريعة', 'كافيه ومقهى'],
-            'خدمات عامة وحرفية': ['صيانة سيارات', 'صيانة منزلية', 'مكتب شحن ونقل']
-        };
-
-        window.onload = function() {
-            fetchGuideData();
-        };
-
-        // 1. جلب البيانات من شيت جوجل
-        async function fetchGuideData() {
-            showLoader('جاري تحديث دليل مدينة حمص وقراءة الأقسام...');
-            try {
-                const response = await fetch(API_URL);
-                if (!response.ok) throw new Error('خطأ اتصال بالسيرفر');
-                
-                fullDatabase = await response.json();
-                
-                // استخراج الأقسام الفريدة من البيانات الحقيقية
-                extractCategoriesStructure();
-                
-                // رندرة المكونات
-                renderMainTabs();
-                populateFormDropdowns();
-                renderFilteredCards();
-                
-                Swal.close();
-            } catch (error) {
-                console.error(error);
-                // في حال كان الشيت فارغاً تماماً وجديداً
-                fullDatabase = [];
-                extractCategoriesStructure();
-                renderMainTabs();
-                populateFormDropdowns();
-                renderFilteredCards();
-                Swal.close();
-            }
+        function updateDisplay() {
+            const mins = Math.floor(timeLeft / 60);
+            const secs = timeLeft % 60;
+            display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        // 2. تحليل واستخراج هيكلية الأقسام الرئيسية والفرعية ديناميكياً
-        function extractCategoriesStructure() {
-            const mainSet = new Set();
-            
-            fullDatabase.forEach(item => {
-                if (item.MainCategory && item.MainCategory.trim() !== '') {
-                    mainSet.add(item.MainCategory.trim());
-                }
-            });
-
-            // دمج الأقسام الافتراضية لضمان عدم خلو النظام من الخيارات البدائية للزوار الجدد
-            defaultMainCategories.forEach(cat => mainSet.add(cat));
-            uniqueMainCategories = Array.from(mainSet);
-        }
-
-        // 3. بناء تبويبات الأقسام الرئيسية (Tabs)
-        function renderMainTabs() {
-            const container = document.getElementById('main-tabs-container');
-            container.innerHTML = '';
-
-            // تبويب الكل
-            const allBtn = document.createElement('button');
-            allBtn.innerText = '📂 عرض الكل';
-            allBtn.className = `px-4 py-2 rounded-xl text-xs font-bold transition duration-200 border ${activeMainTab === 'الكل' ? 'active-tab border-blue-700' : 'bg-white text-gray-600 hover:bg-gray-100 border-gray-200'}`;
-            allBtn.onclick = () => { selectMainTab('الكل'); };
-            container.appendChild(allBtn);
-
-            // باقي التبويبات المستخرجة اتماتيكياً
-            uniqueMainCategories.forEach(cat => {
-                const btn = document.createElement('button');
-                btn.innerText = cat;
-                btn.className = `px-4 py-2 rounded-xl text-xs font-bold transition duration-200 border ${activeMainTab === cat ? 'active-tab border-blue-700' : 'bg-white text-gray-600 hover:bg-gray-100 border-gray-200'}`;
-                btn.onclick = () => { selectMainTab(cat); };
-                container.appendChild(btn);
-            });
-        }
-
-        // 4. بناء فلاتر الأقسام الفرعية عند اختيار تبويب رئيسي معين
-        function renderSubFilters() {
-            const container = document.getElementById('sub-filters-container');
-            container.innerHTML = '';
-
-            if (activeMainTab === 'الكل') {
-                container.classList.add('hidden');
-                return;
-            }
-            container.classList.remove('hidden');
-
-            // استخراج الأقسام الفرعية التابعة للقسم المختار حالياً
-            const subSet = new Set();
-            
-            // من القاعدة
-            fullDatabase.forEach(item => {
-                if (item.MainCategory === activeMainTab && item.SubCategory) {
-                    subSet.add(item.SubCategory.trim());
-                }
-            });
-            // من الافتراضي
-            if (defaultSubCategories[activeMainTab]) {
-                defaultSubCategories[activeMainTab].forEach(sub => subSet.add(sub));
-            }
-
-            const subCategoriesArray = Array.from(subSet);
-
-            // زر الكل الفرعي
-            const allSubBtn = document.createElement('button');
-            allSubBtn.innerText = 'الكل';
-            allSubBtn.className = `px-3 py-1 rounded-lg text-[11px] font-semibold transition ${activeSubFilter === 'الكل' ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`;
-            allSubBtn.onclick = () => { activeSubFilter = 'الكل'; renderSubFilters(); renderFilteredCards(); };
-            container.appendChild(allSubBtn);
-
-            subCategoriesArray.forEach(sub => {
-                const btn = document.createElement('button');
-                btn.innerText = sub;
-                btn.className = `px-3 py-1 rounded-lg text-[11px] font-semibold transition ${activeSubFilter === sub ? 'bg-gray-800 text-white' : 'bg-gray-200 text-gray-600 hover:bg-gray-300'}`;
-                btn.onclick = () => { activeSubFilter = sub; renderSubFilters(); renderFilteredCards(); };
-                container.appendChild(btn);
-            });
-        }
-
-        function selectMainTab(cat) {
-            activeMainTab = cat;
-            activeSubFilter = 'الكل'; // تصفير الفلتر الفرعي
-            renderMainTabs();
-            renderSubFilters();
-            renderFilteredCards();
-        }
-
-        // 5. تصفية وعرض كروت البيانات (لا يوجد بها خيار للحذف لحماية الدليل)
-        function renderFilteredCards() {
-            const grid = document.getElementById('directory-grid');
-            grid.innerHTML = '';
-
-            let filtered = fullDatabase;
-
-            if (activeMainTab !== 'الكل') {
-                filtered = filtered.filter(item => item.MainCategory === activeMainTab);
-                if (activeSubFilter !== 'الكل') {
-                    filtered = filtered.filter(item => item.SubCategory === activeSubFilter);
-                }
-            }
-
-            if (filtered.length === 0) {
-                grid.innerHTML = `<div class="col-span-full text-center py-12 text-gray-400 text-sm bg-white rounded-2xl border border-dashed border-gray-200">لا توجد جهات مسجلة في هذا القسم حالياً. كن أول من يضيف بياناً هنا!</div>`;
-                return;
-            }
-
-            filtered.forEach(item => {
-                const card = document.createElement('div');
-                card.className = 'bg-white rounded-2xl p-5 border border-gray-100 shadow-sm hover:shadow-md transition flex flex-col justify-between relative overflow-hidden';
-                
-                // شريط تزييني ملون جانبي حسب القسم
-                card.innerHTML = `
-                    <div>
-                        <div class="flex justify-between items-start gap-2 mb-2">
-                            <span class="bg-blue-50 text-blue-700 text-[10px] font-extrabold px-2.5 py-1 rounded-md uppercase tracking-wide">${item.SubCategory || 'تصنيف عام'}</span>
-                            <span class="text-gray-300 text-xs">ID: #${item.ID || 'N/A'}</span>
-                        </div>
-                        <h3 class="text-base font-bold text-gray-800 mb-3">${item.Name}</h3>
-                        
-                        <div class="space-y-2 text-xs text-gray-600">
-                            <p class="flex items-center gap-1.5">
-                                <span class="text-gray-400">📍</span> <b>العنوان:</b> ${item.Address}
-                            </p>
-                            ${item.Phone ? `
-                            <p class="flex items-center gap-1.5">
-                                <span class="text-gray-400">📞</span> <b>التواصل:</b> 
-                                <a href="tel:${item.Phone}" class="text-blue-600 font-mono font-semibold hover:underline">${item.Phone}</a>
-                            </p>` : ''}
-                            ${item.Notes ? `
-                            <p class="flex items-start gap-1.5 bg-gray-50 p-2 rounded-lg text-gray-500 text-[11px] mt-2">
-                                <span class="text-gray-400">📝</span> <span>${item.Notes}</span>
-                            </p>` : ''}
-                        </div>
-                    </div>
-                    <div class="mt-4 pt-3 border-t border-gray-50 text-[11px] text-gray-400 flex justify-between items-center">
-                        <span>القسم: ${item.MainCategory}</span>
-                        <span class="text-emerald-600 font-medium">● موثق تشاركياً</span>
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        // 6. تعبئة القوائم المنسدلة في الفورمة وخيار إضافة قسم جديد
-        function populateFormDropdowns() {
-            const mainSelect = document.getElementById('MainCategory');
-            mainSelect.innerHTML = '<option value="">-- اختر القسم الرئيسي --</option>';
-            
-            uniqueMainCategories.forEach(cat => {
-                mainSelect.innerHTML += `<option value="${cat}">${cat}</option>`;
-            });
-            mainSelect.innerHTML += '<option value="NEW_MAIN">➕ إضافة قسم رئيسي جديد غير مدرج...</option>';
-
-            updateSubDropdown();
-        }
-
-        function updateSubDropdown() {
-            const mainSelect = document.getElementById('MainCategory').value;
-            const subSelect = document.getElementById('SubCategory');
-            subSelect.innerHTML = '<option value="">-- اختر التصنيف الفرعي --</option>';
-
-            if (mainSelect && mainSelect !== 'NEW_MAIN') {
-                const subSet = new Set();
-                fullDatabase.forEach(item => {
-                    if (item.MainCategory === mainSelect && item.SubCategory) subSet.add(item.SubCategory.trim());
-                });
-                if (defaultSubCategories[mainSelect]) {
-                    defaultSubCategories[mainSelect].forEach(sub => subSet.add(sub));
-                }
-
-                subSet.forEach(sub => {
-                    subSelect.innerHTML += `<option value="${sub}">${sub}</option>`;
-                });
-            }
-            subSelect.innerHTML += '<option value="NEW_SUB">➕ إضافة تخصص / قسم فرعي جديد...</option>';
-        }
-
-        function toggleNewMainCategoryInput() {
-            const mainSelect = document.getElementById('MainCategory').value;
-            const newMainInput = document.getElementById('NewMainCategory');
-            const subSelect = document.getElementById('SubCategory');
-            
-            if (mainSelect === 'NEW_MAIN') {
-                newMainInput.classList.remove('hidden');
-                newMainInput.required = true;
-                // إذا كان القسم الرئيسي جديد، حتماً سيكون الفرعي جديد
-                subSelect.value = 'NEW_SUB';
-                toggleNewSubCategoryInput();
+        startBtn.addEventListener('click', () => {
+            if (timerId) {
+                clearInterval(timerId);
+                timerId = null;
+                startBtn.textContent = 'Start';
+                document.body.classList.remove('working');
             } else {
-                newMainInput.classList.add('hidden');
-                newMainInput.required = false;
-                newMainInput.value = '';
-                updateSubDropdown();
+                startBtn.textContent = 'Pause';
+                document.body.classList.add('working');
+                timerId = setInterval(() => {
+                    timeLeft--;
+                    updateDisplay();
+                    if (timeLeft <= 0) {
+                        clearInterval(timerId);
+                        alert('Focus session complete!');
+                    }
+                }, 1000);
             }
-        }
+        });
 
-        document.getElementById('MainCategory').addEventListener('change', updateSubDropdown);
+        document.getElementById('reset').addEventListener('click', () => {
+            clearInterval(timerId);
+            timerId = null;
+            timeLeft = 25 * 60;
+            startBtn.textContent = 'Start';
+            document.body.classList.remove('working');
+            updateDisplay();
+        });
 
-        function toggleNewSubCategoryInput() {
-            const subSelect = document.getElementById('SubCategory').value;
-            const newSubInput = document.getElementById('NewSubCategory');
-            
-            if (subSelect === 'NEW_SUB') {
-                newSubInput.classList.remove('hidden');
-                newSubInput.required = true;
-            } else {
-                newSubInput.classList.add('hidden');
-                newSubInput.required = false;
-                newSubInput.value = '';
+        taskInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter' && taskInput.value.trim() !== "") {
+                const li = document.createElement('li');
+                li.className = 'task-item';
+                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
+                taskList.appendChild(li);
+                taskInput.value = "";
             }
-        }
-
-        // 7. معالجة وحفظ الفورمة وإرسالها لـ شيت جوجل عبر الـ API
-        async function handleFormSubmit(event) {
-            event.preventDefault();
-
-            // استخراج القيم الحقيقية
-            let mainCatValue = document.getElementById('MainCategory').value;
-            if (mainCatValue === 'NEW_MAIN') {
-                mainCatValue = document.getElementById('NewMainCategory').value.trim();
-            }
-
-            let subCatValue = document.getElementById('SubCategory').value;
-            if (subCatValue === 'NEW_SUB') {
-                subCatValue = document.getElementById('NewSubCategory').value.trim();
-            }
-
-            if (!mainCatValue || !subCatValue) {
-                Swal.fire({ icon: 'warning', title: 'تنبيه', text: 'يرجى اختيار أو كتابة الأقسام المناسبة أولاً!', confirmButtonText: 'موافق' });
-                return;
-            }
-
-            const payload = {
-                ID: fullDatabase.length + 1,
-                Name: document.getElementById('Name').value.trim(),
-                MainCategory: mainCatValue,
-                SubCategory: subCatValue,
-                Address: document.getElementById('Address').value.trim(),
-                Phone: document.getElementById('Phone').value.trim(),
-                Notes: document.getElementById('Notes').value.trim()
-            };
-
-            showLoader('جاري إرسال البيانات وحفظ القسم الجديد في السيرفر المعني...');
-
-            try {
-                const response = await fetch(API_URL, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify([payload])
-                });
-
-                if (!response.ok) throw new Error('فشل الإرسال');
-
-                Swal.fire({
-                    icon: 'success',
-                    title: 'تم الحفظ والرفع بنجاح',
-                    text: `تم إدراج "${payload.Name}" بنجاح وتوليد الأقسام المتوافقة معه!`,
-                    timer: 2500,
-                    showConfirmButton: false
-                });
-
-                document.getElementById('directory-form').reset();
-                // إخفاء حقول الإدخال الإضافية
-                document.getElementById('NewMainCategory').classList.add('hidden');
-                document.getElementById('NewSubCategory').classList.add('hidden');
-                
-                // إعادة جلب ومزامنة واجهة العرض
-                fetchGuideData();
-
-            } catch (error) {
-                console.error(error);
-                Swal.fire({ icon: 'error', title: 'خطأ في عملية المزامنة', text: 'لم نتمكن من الاتصال بملف الإكسل، تحقق من سلامة الـ API.' });
-            }
-        }
-
-        function showLoader(msg) {
-            Swal.fire({
-                title: msg,
-                allowOutsideClick: false,
-                didOpen: () => { Swal.showLoading(); }
-            });
-        }
+        });
     </script>
 </body>
 </html>
