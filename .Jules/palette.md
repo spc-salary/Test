@@ -1,0 +1,3 @@
+## 2024-07-26 - Improving Keyboard Focus and Semantic Elements in Neumorphic Interfaces
+**Learning:** Neumorphic designs often rely on subtle shadows and remove default outlines (`outline: none;`), which completely destroys keyboard navigability and accessibility. Interactive controls like task deletion using unnavigable elements like `<span>` with click handlers are invisible to screen readers and keyboard-only users.
+**Action:** Always provide explicit `:focus-visible` styles that harmonize with the Neumorphic design (e.g., using a subtle accent border/shadow or ring) and use semantic, keyboard-navigable elements like `<button>` with clear `aria-label` attributes instead of raw click-handling `<span>`s.
