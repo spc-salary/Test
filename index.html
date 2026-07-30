@@ -64,6 +64,12 @@
             color: var(--accent);
         }
 
+        button:focus-visible,
+        .task-input:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 2px;
+        }
+
         .task-input {
             width: 80%;
             padding: 12px;
@@ -93,6 +99,52 @@
             color: #555;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+            transition: opacity 0.2s, text-decoration 0.2s;
+        }
+
+        .task-item.completed {
+            opacity: 0.55;
+            text-decoration: line-through;
+            color: #777;
+        }
+
+        .task-checkbox {
+            margin-right: 10px;
+            cursor: pointer;
+            accent-color: var(--accent);
+            width: 16px;
+            height: 16px;
+            flex-shrink: 0;
+        }
+
+        .task-text {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        button.delete-btn {
+            background: transparent;
+            box-shadow: none;
+            padding: 2px 8px;
+            color: #999;
+            font-size: 1.2rem;
+            border-radius: 5px;
+            font-weight: normal;
+            margin-left: 10px;
+            transition: all 0.1s ease;
+        }
+
+        button.delete-btn:hover, button.delete-btn:focus-visible {
+            color: #e06c75;
+            background: rgba(0, 0, 0, 0.05);
+            box-shadow: none;
+        }
+
+        button.delete-btn:active {
+            box-shadow: none;
+            color: #e06c75;
         }
 
         .working { --bg: #f0e4e4; }
@@ -122,7 +174,13 @@
         function updateDisplay() {
             const mins = Math.floor(timeLeft / 60);
             const secs = timeLeft % 60;
-            display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            const timeStr = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
+            display.textContent = timeStr;
+            if (timerId) {
+                document.title = `(${timeStr}) Focus Flow`;
+            } else {
+                document.title = 'Minimalist Pomodoro';
+            }
         }
 
         startBtn.addEventListener('click', () => {
@@ -131,14 +189,21 @@
                 timerId = null;
                 startBtn.textContent = 'Start';
                 document.body.classList.remove('working');
+                document.title = 'Minimalist Pomodoro';
             } else {
                 startBtn.textContent = 'Pause';
                 document.body.classList.add('working');
+                updateDisplay();
                 timerId = setInterval(() => {
                     timeLeft--;
                     updateDisplay();
                     if (timeLeft <= 0) {
                         clearInterval(timerId);
+                        timerId = null;
+                        startBtn.textContent = 'Start';
+                        document.body.classList.remove('working');
+                        document.title = 'Minimalist Pomodoro';
+                        updateDisplay();
                         alert('Focus session complete!');
                     }
                 }, 1000);
@@ -151,16 +216,47 @@
             timeLeft = 25 * 60;
             startBtn.textContent = 'Start';
             document.body.classList.remove('working');
+            document.title = 'Minimalist Pomodoro';
             updateDisplay();
         });
 
         taskInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && taskInput.value.trim() !== "") {
-                const li = document.createElement('li');
-                li.className = 'task-item';
-                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
-                taskList.appendChild(li);
-                taskInput.value = "";
+            if (e.key === 'Enter') {
+                const taskText = taskInput.value.trim();
+                if (taskText !== "") {
+                    const li = document.createElement('li');
+                    li.className = 'task-item';
+
+                    const label = document.createElement('label');
+                    label.setAttribute('style', 'display: flex; align-items: center; flex-grow: 1; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;');
+
+                    const checkbox = document.createElement('input');
+                    checkbox.type = 'checkbox';
+                    checkbox.className = 'task-checkbox';
+                    checkbox.addEventListener('change', () => {
+                        li.classList.toggle('completed', checkbox.checked);
+                    });
+
+                    const span = document.createElement('span');
+                    span.className = 'task-text';
+                    span.textContent = taskText;
+
+                    label.appendChild(checkbox);
+                    label.appendChild(span);
+
+                    const deleteBtn = document.createElement('button');
+                    deleteBtn.className = 'delete-btn';
+                    deleteBtn.setAttribute('aria-label', `Delete task: ${taskText}`);
+                    deleteBtn.textContent = '×';
+                    deleteBtn.addEventListener('click', () => {
+                        li.remove();
+                    });
+
+                    li.appendChild(label);
+                    li.appendChild(deleteBtn);
+                    taskList.appendChild(li);
+                    taskInput.value = "";
+                }
             }
         });
     </script>
