@@ -64,6 +64,11 @@
             color: var(--accent);
         }
 
+        button:focus-visible, .task-input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
         .task-input {
             width: 80%;
             padding: 12px;
@@ -93,6 +98,45 @@
             color: #555;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            background: none;
+            box-shadow: none;
+            padding: 0 4px;
+            border-radius: 4px;
+            font-weight: normal;
+            color: #999;
+            font-size: 1.1rem;
+            line-height: 1;
+            display: inline-flex;
+            align-items: center;
+        }
+
+        .delete-btn:hover {
+            color: var(--accent);
+        }
+
+        .delete-btn:active {
+            box-shadow: none;
+            color: var(--accent);
+        }
+
+        .delete-btn:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 1px;
+        }
+
+        .sr-only {
+            position: absolute;
+            width: 1px;
+            height: 1px;
+            padding: 0;
+            margin: -1px;
+            overflow: hidden;
+            clip: rect(0, 0, 0, 0);
+            border: 0;
         }
 
         .working { --bg: #f0e4e4; }
@@ -107,6 +151,7 @@
             <button id="start">Start</button>
             <button id="reset">Reset</button>
         </div>
+        <label for="task-input" class="sr-only">Task name</label>
         <input type="text" id="task-input" class="task-input" placeholder="What are we doing?">
         <ul id="task-list"></ul>
     </div>
@@ -158,7 +203,9 @@
             if (e.key === 'Enter' && taskInput.value.trim() !== "") {
                 const li = document.createElement('li');
                 li.className = 'task-item';
-                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
+                li.innerHTML = `<span></span><button class="delete-btn" aria-label="Delete task">&times;</button>`;
+                li.querySelector('span').textContent = taskInput.value;
+                li.querySelector('.delete-btn').addEventListener('click', () => li.remove());
                 taskList.appendChild(li);
                 taskInput.value = "";
             }
