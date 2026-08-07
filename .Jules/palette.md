@@ -1,0 +1,3 @@
+## 2024-08-07 - Accessible Actions and Dynamic Indicators
+**Learning:** Micro-interactions can be elevated by combining visual improvements (like focus-visible styles and semantic buttons with clear ARIA labels) with contextual awareness features (such as updating the browser tab title dynamically). This keeps users aligned and informed without intruding on their primary focus space.
+**Action:** When designing a Pomodoro tracker or any status-dependent static tool, always pair semantic element updates (e.g. replacing general spans with `<button>` elements for actions) with tab-level indicators (`document.title`) to create a comprehensive, multi-layered accessible experience.
