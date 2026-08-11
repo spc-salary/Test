@@ -59,6 +59,11 @@
             transition: all 0.2s ease;
         }
 
+        button:focus-visible, input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
+        }
+
         button:active {
             box-shadow: inset 4px 4px 8px var(--shadow), inset -4px -4px 8px var(--light);
             color: var(--accent);
@@ -93,6 +98,35 @@
             color: #555;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            background: none;
+            border: none;
+            box-shadow: none;
+            padding: 2px 8px;
+            margin: 0;
+            border-radius: 4px;
+            cursor: pointer;
+            color: #888;
+            font-weight: bold;
+            transition: color 0.2s ease, background-color 0.2s ease;
+        }
+
+        .delete-btn:hover {
+            color: #e74c3c;
+            background-color: rgba(231, 76, 60, 0.1);
+        }
+
+        .delete-btn:active {
+            box-shadow: none;
+            color: #c0392b;
+        }
+
+        .delete-btn:focus-visible {
+            outline: 2px solid #e74c3c;
+            outline-offset: 1px;
         }
 
         .working { --bg: #f0e4e4; }
@@ -107,7 +141,7 @@
             <button id="start">Start</button>
             <button id="reset">Reset</button>
         </div>
-        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?">
+        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?" aria-label="What task are you working on?">
         <ul id="task-list"></ul>
     </div>
 
@@ -156,9 +190,23 @@
 
         taskInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && taskInput.value.trim() !== "") {
+                const taskText = taskInput.value.trim();
                 const li = document.createElement('li');
                 li.className = 'task-item';
-                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
+
+                const span = document.createElement('span');
+                span.textContent = taskText;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '×';
+                deleteBtn.setAttribute('aria-label', `Delete task: ${taskText}`);
+                deleteBtn.addEventListener('click', () => {
+                    li.remove();
+                });
+
+                li.appendChild(span);
+                li.appendChild(deleteBtn);
                 taskList.appendChild(li);
                 taskInput.value = "";
             }

@@ -1,0 +1,3 @@
+## 2024-08-11 - Neumorphic Keyboard Navigation and Secure Inputs
+**Learning:** Neumorphic design elements naturally soften or hide native borders and default browser outlines, rendering focus states completely invisible for keyboard-only users. Furthermore, relying on unescaped innerHTML for user-defined task lists introduces security vulnerabilities and micro-UX formatting glitches if users include special characters like brackets or scripts.
+**Action:** Always implement customized `:focus-visible` styles with sufficient offset and color contrast (such as 2px solid matching the accent color) to preserve accessible keyboard navigation, and programmatically construct DOM elements with `textContent` instead of raw `innerHTML` to ensure clean, resilient text insertion.
