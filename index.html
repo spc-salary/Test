@@ -64,6 +64,11 @@
             color: var(--accent);
         }
 
+        button:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 3px;
+        }
+
         .task-input {
             width: 80%;
             padding: 12px;
@@ -73,6 +78,11 @@
             box-shadow: inset 4px 4px 8px var(--shadow), inset -4px -4px 8px var(--light);
             outline: none;
             margin-bottom: 20px;
+        }
+
+        .task-input:focus-visible {
+            outline: 3px solid var(--accent);
+            outline-offset: 3px;
         }
 
         #task-list {
@@ -93,6 +103,27 @@
             color: #555;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            border: none;
+            outline: none;
+            background: transparent;
+            cursor: pointer;
+            color: #888;
+            font-size: 1rem;
+            padding: 2px 6px;
+            transition: color 0.2s;
+        }
+
+        .delete-btn:hover {
+            color: #e74c3c;
+        }
+
+        .delete-btn:focus-visible {
+            outline: 2px solid #e74c3c;
+            border-radius: 4px;
         }
 
         .working { --bg: #f0e4e4; }
@@ -102,10 +133,10 @@
 
     <div class="container" id="app">
         <div style="font-size: 0.8rem; letter-spacing: .2px; color: #888;">FOCUS FLOW</div>
-        <div id="timer-display">25:00</div>
+        <div id="timer-display" aria-live="polite" aria-atomic="true">25:00</div>
         <div id="controls">
-            <button id="start">Start</button>
-            <button id="reset">Reset</button>
+            <button id="start" aria-label="Start focus timer">Start</button>
+            <button id="reset" aria-label="Reset focus timer">Reset</button>
         </div>
         <input type="text" id="task-input" class="task-input" placeholder="What are we doing?">
         <ul id="task-list"></ul>
@@ -130,9 +161,11 @@
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.textContent = 'Start';
+                startBtn.setAttribute('aria-label', 'Start focus timer');
                 document.body.classList.remove('working');
             } else {
                 startBtn.textContent = 'Pause';
+                startBtn.setAttribute('aria-label', 'Pause focus timer');
                 document.body.classList.add('working');
                 timerId = setInterval(() => {
                     timeLeft--;
@@ -150,6 +183,7 @@
             timerId = null;
             timeLeft = 25 * 60;
             startBtn.textContent = 'Start';
+            startBtn.setAttribute('aria-label', 'Start focus timer');
             document.body.classList.remove('working');
             updateDisplay();
         });
@@ -158,7 +192,20 @@
             if (e.key === 'Enter' && taskInput.value.trim() !== "") {
                 const li = document.createElement('li');
                 li.className = 'task-item';
-                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
+
+                const textSpan = document.createElement('span');
+                textSpan.textContent = taskInput.value;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '×';
+                deleteBtn.setAttribute('aria-label', `Delete task: ${taskInput.value}`);
+                deleteBtn.addEventListener('click', () => {
+                    li.remove();
+                });
+
+                li.appendChild(textSpan);
+                li.appendChild(deleteBtn);
                 taskList.appendChild(li);
                 taskInput.value = "";
             }
