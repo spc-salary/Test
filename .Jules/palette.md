@@ -1,0 +1,3 @@
+## 2026-08-16 - Neumorphic Visual Styles and Dynamic Interactive Elements
+**Learning:** Neumorphic visual designs natively obscure default browser focus outlines. Additionally, dynamically appended list items created via `innerHTML` can bypass screen readers and introduce security/accessibility issues if action triggers are non-focusable elements (like `<span>`).
+**Action:** Always provide explicit `:focus-visible` ring indicators for neumorphic controls, use `document.createElement` / `textContent` for dynamic item insertion, and ensure interactive elements (like deletion) are semantic `<button>` tags with descriptive dynamic `aria-label`s.
