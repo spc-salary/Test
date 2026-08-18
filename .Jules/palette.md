@@ -1,0 +1,3 @@
+## 2025-05-14 - Neumorphic Interface Focus States & Dynamic ARIA Labels
+**Learning:** Neumorphic design patterns rely on subtle inset/outset shadows that obscure browser default focus outlines, making keyboard navigation virtually invisible without custom focus indicator rules. Additionally, task management in vanilla JS apps often uses non-semantic inline elements (e.g. `<span>x</span>`) for deletion.
+**Action:** Always add explicit `:focus-visible` styling (`outline` and `outline-offset`) to interactive elements in soft-UI/neumorphic interfaces. Use `document.createElement` and semantic `<button>` elements with dynamic `aria-label`s for task actions.
