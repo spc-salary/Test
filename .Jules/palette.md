@@ -1,0 +1,3 @@
+## 2025-08-19 - Accessible Focus States in Neumorphic UI & Semantic Task Action Controls
+**Learning:** Neumorphic visual designs rely on subtle inset/outset box shadows that override or obscure standard browser focus rings, making keyboard navigation invisible. Additionally, dynamically inserted task items using raw `innerHTML` string interpolation often produce non-focusable, non-semantic deletion elements (like `<span>x</span>`) lacking ARIA context.
+**Action:** Always complement neumorphic button/input styles with explicit `:focus-visible` focus rings (e.g., `outline: 2px solid var(--accent); outline-offset: 2px;`) and dynamically create task controls using semantic `<button>` elements with descriptive `aria-label` attributes.
