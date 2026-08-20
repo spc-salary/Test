@@ -1,0 +1,3 @@
+## 2026-08-20 - Neumorphic UI Focus States and Dynamic Task Accessibility
+**Learning:** Neumorphic soft-shadow designs remove default browser borders/outlines, making standard keyboard focus invisible unless explicitly specified with `:focus-visible`. Additionally, creating list items via `innerHTML` strips keyboard accessibility for action triggers (like delete) and introduces XSS risks.
+**Action:** Always add explicit `:focus-visible` ring styles (`outline: 2px solid var(--accent)`) to interactive elements in neumorphic designs, and construct dynamic items using `document.createElement`, `textContent`, and semantic `<button>` tags with dynamic `aria-label`s.
