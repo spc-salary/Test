@@ -1,0 +1,3 @@
+## 2025-08-21 - Focus States and Dynamic ARIA Labels in Neumorphic Interfaces
+**Learning:** Neumorphic design aesthetics rely heavily on soft inner/outer box shadows and often suppress standard browser focus outlines (`outline: none`), making keyboard navigation invisible. Additionally, dynamic action buttons (e.g., Start/Pause toggle) and dynamic lists (e.g., deleted task items) need explicit ARIA labels and semantic focusable elements to be accessible to screen readers.
+**Action:** Always provide explicit `:focus-visible` outline styles for neumorphic interactive elements, toggle `aria-label` along with button text during state changes, and create dynamic item deletion actions as semantic `<button>` elements with descriptive `aria-label`s.
