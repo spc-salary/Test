@@ -1,0 +1,3 @@
+## 2026-08-23 - Neumorphic UI Focus Indicators & Task Action Semantics
+**Learning:** Neumorphic visual styling natively sets `outline: none`, hiding focus states and rendering keyboard navigation invisible to screen reader and keyboard users. Additionally, using raw `innerHTML` for dynamic task items creates XSS risks and non-focusable delete controls.
+**Action:** Always provide explicit `:focus-visible` ring/outline styles for interactive elements in custom styled UIs, and build dynamic list items using `document.createElement` with semantic, focusable `<button>` tags and descriptive `aria-label`s.
