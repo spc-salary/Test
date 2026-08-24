@@ -1,0 +1,3 @@
+## 2025-08-24 - Neumorphic Focus States & Dynamic Task Action Labels
+**Learning:** Neumorphic visual designs natively obscure focus states due to custom box-shadows and `outline: none`. Adding explicit `:focus-visible` styling restores focus indicators for keyboard navigation. Additionally, dynamically created list items need semantic `<button>` elements with descriptive, dynamic `aria-label` attributes (e.g. `Delete task: <taskName>`) to ensure clear screen reader context.
+**Action:** Always provide explicit `:focus-visible` outlines in neumorphic themes and create task action buttons programmatically with dynamic ARIA attributes.
