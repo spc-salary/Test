@@ -1,0 +1,3 @@
+## 2025-05-18 - Focus Indicators and Accessible Dynamic Actions in Neumorphic UI
+**Learning:** Neumorphic design aesthetics naturally obscure default focus rings and interactive boundaries. Additionally, dynamic lists created with innerHTML can introduce XSS risks and leave action controls non-focusable for screen readers.
+**Action:** Always add explicit `:focus-visible` styles to interactive elements in custom design systems, construct dynamic list items using `document.createElement` with `textContent`, and ensure action elements use semantic `<button>` elements with descriptive, dynamic `aria-label` attributes.
