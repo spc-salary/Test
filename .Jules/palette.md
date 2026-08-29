@@ -1,0 +1,3 @@
+## 2024-08-29 - Focus Indicators in Neumorphic Designs & Safe Dynamic Action Controls
+**Learning:** Neumorphic designs often set `outline: none` on interactive elements, hiding keyboard focus indicators. Additionally, dynamic lists rendered via raw `innerHTML` can introduce XSS risks and non-accessible interaction patterns (like non-keyboard focusable `<span>` deletion triggers).
+**Action:** Always provide explicit `:focus-visible` outlines for interactive controls in neumorphic themes, use standard DOM element creation methods (`document.createElement`), and render action elements as semantic `<button>` tags with dynamic `aria-label`s.
