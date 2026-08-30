@@ -1,0 +1,3 @@
+## 2026-08-30 - Neumorphic Focus States and Dynamic Task Item Accessibility
+**Learning:** Neumorphic visual design relying solely on standard inset/outset drop shadows hides native browser focus rings. Additionally, dynamic task item creation using raw innerHTML with non-semantic click targets breaks screen reader navigation and keyboard interactions.
+**Action:** Always provide explicit `:focus-visible` outline styles with sufficient offset for interactive controls in soft UI designs, and create dynamic list items using `document.createElement` with semantic, focusable `<button>` elements having dynamic `aria-label`s.
