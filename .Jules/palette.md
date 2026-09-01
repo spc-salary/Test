@@ -1,0 +1,3 @@
+## 2026-09-01 - Neumorphic Keyboard Focus & Accessible Dynamic Task Buttons
+**Learning:** Neumorphic UI design patterns remove traditional borders and inset shadows, hiding browser default focus rings. Without explicit `:focus-visible` styling, keyboard navigation becomes invisible. Furthermore, inline task deletion using non-semantic `<span>` tags with `onclick` prevents screen readers and keyboard users from deleting tasks.
+**Action:** Always provide explicit `focus-visible` outline rings in neumorphic interfaces, and build dynamic list item actions using semantic `<button>` elements with contextual `aria-label`s.
