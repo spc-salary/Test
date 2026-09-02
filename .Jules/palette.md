@@ -1,0 +1,3 @@
+## 2025-05-18 - Neumorphic UI Focus States and Dynamic Task Item Accessibility
+**Learning:** Neumorphic design patterns rely on subtle inset/outset box shadows that strip default browser focus rings (`outline: none`), making keyboard navigation invisible. Additionally, dynamically created list items with raw innerHTML and non-focusable `<span>` delete buttons create accessibility barriers and XSS risks.
+**Action:** Always provide explicit `:focus-visible` styling using standard high-contrast accent colors and outline-offset for soft neumorphic elements. When dynamically creating task items, use `document.createElement` and `textContent` instead of `innerHTML`, and render delete actions as semantic, focusable `<button>` elements with dynamic `aria-label`s.
