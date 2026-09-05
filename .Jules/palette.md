@@ -1,0 +1,3 @@
+## 2025-05-18 - Neumorphic Design Keyboard Focus & Dynamic Task Actions
+**Learning:** Neumorphic design interfaces (using soft inset/outset shadows and `outline: none`) completely obscure default focus indicators. Furthermore, dynamic list elements generated via `innerHTML` with string interpolation can introduce XSS risks and non-keyboard-accessible delete triggers (e.g., `<span onclick="...">x</span>`).
+**Action:** Always add explicit `:focus-visible` ring outlines for interactive neumorphic controls. When creating dynamic list items, use `document.createElement` and `textContent`, and render deletion actions as semantic `<button>` elements with descriptive dynamic `aria-label`s.
