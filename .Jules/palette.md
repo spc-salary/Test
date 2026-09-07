@@ -1,0 +1,3 @@
+## 2025-05-18 - Neumorphic Focus States and Dynamic Task Item Action Buttons
+**Learning:** Neumorphic design systems rely on soft shadows and standard background tones, which natively obscure standard web focus indicators. Additionally, dynamic lists created via `innerHTML` often use non-interactive spans or direct text string concatenation for delete actions, breaking screen reader navigation and introducing potential XSS risks.
+**Action:** Always declare explicit `:focus-visible` ring/outline styles matching the accent theme for neumorphic inputs and buttons, use `role="timer"` on active countdown displays, and create dynamic task list actions using semantic `<button>` elements with descriptive dynamic `aria-label`s.
