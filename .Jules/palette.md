@@ -1,0 +1,3 @@
+## 2026-09-08 - Focus-visible and Accessible Controls in Neumorphic UI
+**Learning:** Neumorphic design patterns rely on subtle inset/outset drop shadows which completely obscure default browser focus outlines, rendering keyboard navigation invisible to users. Furthermore, dynamic timer controls and task item actions lack semantic roles and accessible labels if relying on basic string template injection.
+**Action:** Always provide explicit `:focus-visible` outline styles with sufficient contrast offset, use `role="timer"` with dynamic `aria-label` attribute updates for live countdown controls, and construct dynamic list items using DOM node creation (`document.createElement`) with explicit `<button>` actions and dynamic ARIA labels.
