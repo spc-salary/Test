@@ -1,0 +1,3 @@
+## 2025-09-12 - Neumorphic UI Keyboard Focus States & Dynamic Task A11y
+**Learning:** Neumorphic design systems rely heavily on soft `box-shadow` styles, which often obscure or omit standard focus indicators, leaving keyboard users without visual context. Dynamic list items created with raw `innerHTML` lack keyboard focusability for delete actions and introduce potential security risks.
+**Action:** Always add explicit `:focus-visible` outline styles for buttons and inputs in soft/neumorphic design systems, and build dynamic elements using safe DOM APIs (`document.createElement`) with semantic `<button>` elements having descriptive `aria-label` attributes.
