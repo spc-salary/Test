@@ -64,6 +64,11 @@
             color: var(--accent);
         }
 
+        button:focus-visible, .task-input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
         .task-input {
             width: 80%;
             padding: 12px;
@@ -93,6 +98,22 @@
             color: #555;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            padding: 2px 6px;
+            font-size: 1rem;
+            color: #888;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .delete-btn:hover {
+            color: #e63946;
         }
 
         .working { --bg: #f0e4e4; }
@@ -102,12 +123,12 @@
 
     <div class="container" id="app">
         <div style="font-size: 0.8rem; letter-spacing: .2px; color: #888;">FOCUS FLOW</div>
-        <div id="timer-display">25:00</div>
+        <div id="timer-display" role="timer" aria-live="off">25:00</div>
         <div id="controls">
-            <button id="start">Start</button>
-            <button id="reset">Reset</button>
+            <button id="start" aria-label="Start timer">Start</button>
+            <button id="reset" aria-label="Reset timer">Reset</button>
         </div>
-        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?">
+        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?" aria-label="What are we doing?">
         <ul id="task-list"></ul>
     </div>
 
@@ -125,14 +146,16 @@
             display.textContent = `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
         }
 
-        startBtn.addEventListener('click', () => {
+        function toggleTimer() {
             if (timerId) {
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.textContent = 'Start';
+                startBtn.setAttribute('aria-label', 'Start timer');
                 document.body.classList.remove('working');
             } else {
                 startBtn.textContent = 'Pause';
+                startBtn.setAttribute('aria-label', 'Pause timer');
                 document.body.classList.add('working');
                 timerId = setInterval(() => {
                     timeLeft--;
@@ -143,22 +166,37 @@
                     }
                 }, 1000);
             }
-        });
+        }
+
+        startBtn.addEventListener('click', toggleTimer);
 
         document.getElementById('reset').addEventListener('click', () => {
             clearInterval(timerId);
             timerId = null;
             timeLeft = 25 * 60;
             startBtn.textContent = 'Start';
+            startBtn.setAttribute('aria-label', 'Start timer');
             document.body.classList.remove('working');
             updateDisplay();
         });
 
         taskInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && taskInput.value.trim() !== "") {
+                const text = taskInput.value.trim();
                 const li = document.createElement('li');
                 li.className = 'task-item';
-                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
+
+                const span = document.createElement('span');
+                span.textContent = text;
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '×';
+                deleteBtn.setAttribute('aria-label', `Delete task: ${text}`);
+                deleteBtn.addEventListener('click', () => li.remove());
+
+                li.appendChild(span);
+                li.appendChild(deleteBtn);
                 taskList.appendChild(li);
                 taskInput.value = "";
             }
