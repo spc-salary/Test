@@ -1,0 +1,3 @@
+## 2026-09-14 - Neumorphic Focus States and Dynamic Task Action Accessibility
+**Learning:** Neumorphic designs natively remove standard focus outlines (`outline: none`), hiding keyboard navigation indicators. Additionally, inline dynamic task items constructed with `innerHTML` and `onclick` on `<span>` elements prevent screen readers and keyboard-only users from discovering or activating deletion actions.
+**Action:** Always provide explicit `:focus-visible` ring styles matching accent colors on interactive elements. When building dynamic task lists, use `document.createElement`, `textContent`, and semantic `<button>` elements with descriptive dynamic `aria-label` attributes (e.g., `aria-label="Delete task: [Task Name]"`).
