@@ -1,0 +1,3 @@
+## 2025-05-18 - Neumorphic Focus Indicators and Dynamic Action ARIA Labels
+**Learning:** Neumorphic CSS design soft shadows hide native outline focus indicators. Furthermore, task deletion buttons dynamically generated via string templates lack key accessibility semantics (aria-label, focusable element).
+**Action:** Always add explicit `:focus-visible` ring/outline rules matching accent color for interactive components in soft-shadow designs, replace raw string concatenation (`innerHTML`) with DOM element construction (`createElement`), and provide dynamic `aria-label` attributes for list item actions (e.g., `Delete task: <task_name>`).
