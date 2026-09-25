@@ -1,0 +1,3 @@
+## 2025-09-25 - Neumorphic UI Keyboard Focus & Dynamic Action Accessibility
+**Learning:** Neumorphic soft-shadow designs remove standard borders and outlines, which obscures element focus states during keyboard navigation. Additionally, dynamically inserted task items created via raw `innerHTML` lack XSS protection and keyboard-accessible control buttons.
+**Action:** Always add explicit `:focus-visible` outline styles in neumorphic themes, and construct dynamic list items using `document.createElement`, safe `textContent`, and focusable `<button>` elements with descriptive `aria-label` attributes.
