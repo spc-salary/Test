@@ -1,0 +1,3 @@
+## 2025-05-10 - Neumorphic Focus States & Timer Accessibility
+**Learning:** Neumorphic visual designs rely heavily on subtle box-shadows, which inherently obscure standard browser focus rings, leaving keyboard users with no visual feedback. Additionally, countdown timers updated dynamically shouldn't rely on raw `innerHTML` for list items or missing `role="timer"` semantics.
+**Action:** Always add explicit `:focus-visible` outline styles styled with existing theme tokens (`var(--accent)`), and ensure dynamic list creation uses safe DOM methods (`textContent`, `createElement`) with accessible `<button>` actions and dynamic ARIA attributes.
