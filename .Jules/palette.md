@@ -1,0 +1,3 @@
+## 2025-02-23 - Neumorphic Interface Keyboard Focus & Semantic Task Management
+**Learning:** Neumorphic interfaces rely heavily on soft shadows and standard background colors, which strip standard browser focus borders and make keyboard navigation invisible. Additionally, dynamic list items built using string interpolation / `innerHTML` create XSS risks and non-focusable click targets.
+**Action:** Always add explicit `:focus-visible` outline styles matching the accent theme on custom soft-UI controls, and construct task items dynamically using `document.createElement` with semantic, focusable `<button>` controls and contextual `aria-label`s.
