@@ -1,0 +1,3 @@
+## 2025-02-14 - Focus Indicators and Accessible Dynamic Task Creation in Neumorphic UI
+**Learning:** Neumorphic designs remove standard default browser outlines, leaving interactive controls without visual focus indicators for keyboard users. Additionally, creating dynamic tasks via `innerHTML` with non-semantic `span` delete handlers creates XSS risks and makes deletion controls un-navigable via keyboard.
+**Action:** Always provide explicit `:focus-visible` ring/outline styles matching the primary accent color for all interactive elements, and safely build dynamic task elements using standard DOM construction (`document.createElement`) with semantic `<button>` elements and context-aware `aria-label` attributes.
