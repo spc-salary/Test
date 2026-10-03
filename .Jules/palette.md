@@ -1,0 +1,3 @@
+## 2026-10-03 - Focus Visibility and Semantic Action Controls in Neumorphic UI
+**Learning:** Neumorphic design relies heavily on soft shadows without strong visual borders, which natively hides standard focus states. Additionally, dynamically added list item actions created with non-interactive elements like `<span>` prevent keyboard access and screen reader announcements.
+**Action:** Always add explicit `:focus-visible` outline styles with sufficient contrast offset for interactive elements in neumorphic themes, use semantic `<button>` elements with dynamic `aria-label`s for item actions, and safe DOM methods (`document.createElement`) to avoid XSS vulnerabilities.
