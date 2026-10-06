@@ -1,0 +1,3 @@
+## 2025-10-06 - Neumorphic Keyboard Navigation & Semantic Action Elements
+**Learning:** Neumorphic design systems rely heavily on subtle light and shadow effects which remove default outline borders, making standard focus states invisible to keyboard users. Furthermore, task delete actions using non-semantic `span` tags with `onclick` handlers prevent screen readers and keyboard users from focusing or interacting with delete controls.
+**Action:** Always add explicit `:focus-visible` outline styles matching the accent theme on neumorphic interactive elements, and build dynamic task actions using semantic `<button>` tags with descriptive dynamic `aria-label`s and `textContent`.
