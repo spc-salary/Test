@@ -1,0 +1,3 @@
+## 2025-10-08 - Neumorphic UI Keyboard Focus & Screen Reader Timer Management
+**Learning:** Neumorphic design aesthetics obscure standard outline borders and active states, rendering standard focus indicators invisible. Additionally, active countdown displays announced via `aria-live` pollute screen reader audio, whereas using `role="timer"` with explicit dynamic `aria-label`s on control buttons provides clean, accessible feedback.
+**Action:** Always include explicit `:focus-visible` outline styles when working with soft/neumorphic design components, and pair timer displays with dynamic control button labels rather than live region updates.
