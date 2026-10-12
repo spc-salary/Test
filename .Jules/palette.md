@@ -1,0 +1,3 @@
+## 2025-05-18 - Neumorphic UI Keyboard Focus & Dynamic Action ARIA
+**Learning:** Neumorphic design patterns rely on subtle inset/outset shadows which natively hide default browser focus outlines. Additionally, dynamic item creation using `innerHTML` often leaves action elements non-focusable (`<span>`) without ARIA context.
+**Action:** Always provide explicit `:focus-visible` ring indicators styled with the primary accent color for all inputs and buttons, and create dynamic action controls as semantic `<button>` elements with descriptive `aria-label` attributes using safe DOM methods (`document.createElement`).
