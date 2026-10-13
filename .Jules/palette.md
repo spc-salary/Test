@@ -1,0 +1,3 @@
+## 2025-05-18 - Neumorphic Interface Focus Visibility & Accessible Task Controls
+**Learning:** Neumorphic design patterns rely on subtle inset/outset box-shadows which obscure default browser outlines. Screen readers and keyboard navigation require explicit `:focus-visible` ring indicators, `role="timer"`, and semantic `<button>` elements with dynamic `aria-label`s instead of non-focusable `<span>` tags.
+**Action:** When building neumorphic UIs, always add prominent `:focus-visible` focus rings to all interactive elements and use `document.createElement` with semantic buttons for dynamic list actions.
