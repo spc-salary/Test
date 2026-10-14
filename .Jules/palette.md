@@ -1,0 +1,3 @@
+## 2026-10-14 - Focus-Visible Rings & Dynamic ARIA Labels in Neumorphic UI
+**Learning:** Neumorphic design interfaces natively suppress standard browser focus indicators via box-shadows and border removal. Dynamic task lists with inline string manipulation like `innerHTML` omit keyboard focusability and screen reader context for deletion actions.
+**Action:** Always add explicit `:focus-visible` ring styling matching the design token accent color (`var(--accent)`), use `document.createElement` to construct dynamic elements securely without `innerHTML`, and provide semantic `<button>` elements with detailed `aria-label`s for interactive actions like task deletion.
