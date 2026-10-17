@@ -1,0 +1,3 @@
+## 2026-10-17 - Neumorphic Visual Focus and Dynamic Action Buttons
+**Learning:** Neumorphic design components commonly remove default focus outlines (`outline: none`), hiding keyboard navigation focus states. Dynamic action items created inline often default to non-semantic HTML (`<span onclick=...>`) with raw `innerHTML`, causing both XSS vulnerabilities and complete keyboard/screen-reader inaccessibility.
+**Action:** Always provide explicit `:focus-visible` styles with custom contrast borders on neumorphic elements, and dynamically generate interactive task controls as focusable `<button>` elements with `textContent` and dynamic `aria-label` attributes.
