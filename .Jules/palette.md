@@ -1,0 +1,3 @@
+## 2025-10-21 - Focus Visible & Semantic Controls in Neumorphic Interfaces
+**Learning:** Neumorphic visual designs rely heavily on soft outer and inner box-shadows, which often remove or obscure standard browser focus outlines. In addition, task deletion controls rendered as non-interactive elements (such as `<span>`) prevent keyboard-only users from interacting with task lists.
+**Action:** Always provide explicit `:focus-visible` outline rules using high-contrast accent colors and replace non-semantic delete toggles with focusable `<button>` elements equipped with dynamic, descriptive `aria-label` attributes.
