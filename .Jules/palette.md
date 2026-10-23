@@ -1,0 +1,3 @@
+## 2026-10-23 - Neumorphic UI Focus States & Dynamic Task Action Accessibility
+**Learning:** Neumorphic visual designs rely on soft shadows and hidden borders which often strip away native focus indicators. Furthermore, dynamically inserted list items frequently rely on inline `innerHTML` and un-focusable non-semantic elements (`<span>` click handlers) for interactive actions like deletion.
+**Action:** Always provide explicit `:focus-visible` outline styles styled with system accent colors for interactive elements in soft/neumorphic UIs, and construct dynamic items using safe DOM methods (`document.createElement`) with semantic `<button>` elements and dynamic `aria-label`s.

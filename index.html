@@ -64,6 +64,11 @@
             color: var(--accent);
         }
 
+        button:focus-visible, .task-input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
         .task-input {
             width: 80%;
             padding: 12px;
@@ -93,6 +98,23 @@
             color: #555;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .delete-btn {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            padding: 0 6px;
+            cursor: pointer;
+            color: #888;
+            font-size: 1.1rem;
+            line-height: 1;
+            border-radius: 4px;
+        }
+
+        .delete-btn:hover {
+            color: #e53e3e;
         }
 
         .working { --bg: #f0e4e4; }
@@ -156,9 +178,22 @@
 
         taskInput.addEventListener('keypress', (e) => {
             if (e.key === 'Enter' && taskInput.value.trim() !== "") {
+                const taskText = taskInput.value.trim();
                 const li = document.createElement('li');
                 li.className = 'task-item';
-                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
+
+                const span = document.createElement('span');
+                span.textContent = taskText;
+
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.className = 'delete-btn';
+                delBtn.textContent = '×';
+                delBtn.setAttribute('aria-label', `Delete task: ${taskText}`);
+                delBtn.addEventListener('click', () => li.remove());
+
+                li.appendChild(span);
+                li.appendChild(delBtn);
                 taskList.appendChild(li);
                 taskInput.value = "";
             }
