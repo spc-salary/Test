@@ -1,0 +1,3 @@
+## 2024-10-24 - Neumorphic UI Focus States & Dynamic Task Creation A11y
+**Learning:** Neumorphic design defaults (`outline: none` without focus states) completely hide focus indicators for keyboard users. Additionally, creating interactive task items using raw `innerHTML` lacks focusable, semantic controls with proper ARIA attributes and risks XSS.
+**Action:** Always provide explicit `:focus-visible` styles for soft UI/neumorphic interfaces and dynamically create task elements using `document.createElement` with semantic, focusable `<button>` elements that include dynamic `aria-label` attributes.
