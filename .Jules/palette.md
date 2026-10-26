@@ -1,0 +1,3 @@
+## 2026-10-26 - Neumorphic Visual Focus & Dynamic List Actions
+**Learning:** Neumorphic visual design natively hides standard focus outlines due to `outline: none` styles, rendering keyboard navigation invisible. Additionally, dynamically created tasks using raw `innerHTML` spans for delete actions prevent keyboard activation and screen reader context.
+**Action:** Always provide explicit `:focus-visible` styling for interactive neumorphic controls, construct dynamic elements via safe DOM APIs (`document.createElement`), and use semantic `<button>` elements with descriptive dynamic `aria-label`s.
