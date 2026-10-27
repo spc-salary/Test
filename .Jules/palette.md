@@ -1,0 +1,3 @@
+## 2025-05-15 - Neumorphic Focus States & Dynamic Accessible Task Actions
+**Learning:** Neumorphic design systems natively remove/override default browser outlines, making interactive components invisible to keyboard navigation unless explicit `:focus-visible` styles are declared. In addition, dynamic task list items built via `innerHTML` often introduce security risks and lack accessible interactive deletion buttons.
+**Action:** Always provide `button:focus-visible` and `input:focus-visible` outlines matching the accent color in neumorphic themes. When dynamically creating task elements, build DOM nodes safely using `document.createElement` and `textContent`, and pair action items with semantic `<button>` elements containing context-specific `aria-label` attributes.
