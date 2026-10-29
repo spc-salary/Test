@@ -1,0 +1,3 @@
+## 2026-10-29 - Neumorphic Task List Accessibility & Focus Indicators
+**Learning:** Neumorphic design systems rely heavily on soft inset/outset shadows which natively hide default outline focus indicators. Furthermore, task deletion using `span` click handlers prevents keyboard access and dynamic screen reader feedback.
+**Action:** Always add explicit `:focus-visible` ring styles with high contrast accent colors for neumorphic components, and construct dynamic list items using semantic `<button>` controls with dynamic `aria-label` attributes (e.g. `Delete task: <name>`) and safe DOM text nodes.
