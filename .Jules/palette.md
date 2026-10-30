@@ -1,0 +1,3 @@
+## 2025-05-18 - Neumorphic UI Keyboard Focus & Screen Reader Timer Accessibility
+**Learning:** Neumorphic design systems often remove default outlines and borders, rendering default keyboard focus states invisible. Additionally, dynamic timers updated every second can overwhelm screen reader users if announced on every tick via polite live regions; using `role="timer"` with descriptive ARIA labels on control buttons provides a superior accessible experience.
+**Action:** Always include explicit `:focus-visible` ring/outline styles matching the theme accent color for interactive components in neumorphic interfaces, and ensure action toggle buttons dynamically update their `aria-label` attributes alongside text changes.
