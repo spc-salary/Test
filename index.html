@@ -64,6 +64,27 @@
             color: var(--accent);
         }
 
+        button:focus-visible, .task-input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 2px;
+        }
+
+        .task-item button {
+            background: none;
+            border: none;
+            box-shadow: none;
+            padding: 0 4px;
+            cursor: pointer;
+            color: #888;
+            font-size: 1rem;
+            line-height: 1;
+            border-radius: 4px;
+        }
+
+        .task-item button:hover {
+            color: #d9534f;
+        }
+
         .task-input {
             width: 80%;
             padding: 12px;
@@ -102,12 +123,12 @@
 
     <div class="container" id="app">
         <div style="font-size: 0.8rem; letter-spacing: .2px; color: #888;">FOCUS FLOW</div>
-        <div id="timer-display">25:00</div>
+        <div id="timer-display" role="timer" aria-label="Pomodoro timer">25:00</div>
         <div id="controls">
             <button id="start">Start</button>
             <button id="reset">Reset</button>
         </div>
-        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?">
+        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?" aria-label="New task description">
         <ul id="task-list"></ul>
     </div>
 
@@ -155,10 +176,19 @@
         });
 
         taskInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && taskInput.value.trim() !== "") {
+            const text = taskInput.value.trim();
+            if (e.key === 'Enter' && text !== "") {
                 const li = document.createElement('li');
                 li.className = 'task-item';
-                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
+                const span = document.createElement('span');
+                span.textContent = text;
+                const delBtn = document.createElement('button');
+                delBtn.type = 'button';
+                delBtn.setAttribute('aria-label', `Delete task: ${text}`);
+                delBtn.textContent = '×';
+                delBtn.addEventListener('click', () => li.remove());
+                li.appendChild(span);
+                li.appendChild(delBtn);
                 taskList.appendChild(li);
                 taskInput.value = "";
             }
