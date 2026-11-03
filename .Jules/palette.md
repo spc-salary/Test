@@ -1,0 +1,3 @@
+## 2025-05-18 - Neumorphic Focus Visibility and Accessible Dynamic Task Lists
+**Learning:** Neumorphic soft-shadow designs typically remove default outlines, rendering keyboard navigation invisible. Additionally, dynamic lists often rely on non-semantic clickable elements (`<span>x</span>`) that cannot be tabbed to or read properly by screen readers.
+**Action:** Always provide explicit `:focus-visible` styling using the design system's accent color and offset, and generate dynamic actions using semantic `<button>` elements with descriptive `aria-label` attributes (`aria-label="Delete task: ..."`).
