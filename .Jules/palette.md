@@ -1,0 +1,3 @@
+## 2026-11-04 - Neumorphic UI Keyboard Focus & Dynamic Task Actions
+**Learning:** Neumorphic interfaces with softened shadows hide natural browser outline rings, making keyboard navigation completely invisible unless explicit `:focus-visible` styling is defined. Additionally, inline dynamic task items frequently misuse raw unkeyboardable elements (like unstyled `<span>x</span>` with `onclick`) which omit keyboard access and screen reader announcements.
+**Action:** Always provide explicit `:focus-visible` outline rings using the theme accent color, build dynamic action elements as semantic `<button>` tags with contextual `aria-label` attributes, and assign `role="timer"` to countdowns to support assistive technologies.
