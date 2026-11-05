@@ -1,0 +1,3 @@
+## 2026-11-05 - Restoring Keyboard Focus and Accessible Interactive Controls in Neumorphic Interfaces
+**Learning:** Neumorphic design aesthetics typically eliminate default browser outlines (`outline: none`), rendering interactive controls completely inaccessible for keyboard navigation. Additionally, using non-semantic elements (e.g. `<span>` with click handlers) for destructive actions prevents screen readers and keyboard users from discovering or activating them.
+**Action:** Always provide explicit `:focus-visible` styles matching the neumorphic color system (e.g., `--accent` outline ring) on interactive controls, and construct action items using semantic `<button>` elements with descriptive `aria-label`s and safe DOM manipulation.
