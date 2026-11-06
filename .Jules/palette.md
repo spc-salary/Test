@@ -1,0 +1,3 @@
+## 2025-02-18 - Neumorphic Focus States & Dynamic List Deletion
+**Learning:** Neumorphic design relies heavily on subtle outer and inner box-shadows with `outline: none;`, which completely strips focus perception for keyboard navigators. Furthermore, quick proto list items frequently use non-semantic `<span>` click handlers for deletion that are inaccessible via keyboard and screen readers.
+**Action:** Always provide explicit `:focus-visible` styling with high-contrast outlines matching the accent color, and implement dynamic list actions using semantic `<button>` elements with descriptive dynamic `aria-label`s and safe DOM manipulation.
