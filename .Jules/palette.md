@@ -1,0 +1,3 @@
+## 2026-06-18 - Accessible Neumorphic Interactive Elements and Dynamic Actions
+**Learning:** Neumorphic interfaces often strip away default browser outlines and rely on soft box-shadows that fail to communicate keyboard focus, and dynamic task items created with inline innerHTML using non-semantic clickable spans (e.g., `<span onclick="...">x</span>`) are completely unreachable via keyboard navigation and invisible to screen readers.
+**Action:** Always provide explicit `:focus-visible` styling using the design system's accent color, construct dynamic list items using semantic elements (`<button type="button">`) with descriptive `aria-label`s, and set text using `textContent` to ensure both accessibility and XSS safety.
