@@ -1,0 +1,3 @@
+## 2026-11-09 - Neumorphic Design Accessibility & Task Action Semantics
+**Learning:** Neumorphic interfaces suppress default focus outlines and shadow cues, making focus navigation nearly invisible for keyboard users. Furthermore, dynamic task lists rendering non-semantic deletion elements via raw `innerHTML` introduce XSS hazards and block assistive technologies from identifying actionable controls.
+**Action:** Always provide explicit `:focus-visible` styling with accent outline/rings that fit neumorphic aesthetics, and use semantic `<button>` elements with clear, contextual `aria-label`s for dynamic items.
