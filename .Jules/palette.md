@@ -1,0 +1,3 @@
+## 2026-06-18 - Keyboard Focus in Neumorphic Interfaces & Accessible Task Controls
+**Learning:** Neumorphic design systems inherently rely on soft shadows and eliminate default browser focus outlines (`outline: none`), making the interface completely invisible to keyboard navigators. Furthermore, dynamically inserted list items frequently use clickable text spans (`x`) without semantic buttons, omitting accessible names and keyboard triggers.
+**Action:** Always provide explicit `:focus-visible` styling paired with the design system's accent color (`--accent`) and offset, and construct dynamic action controls using semantic `<button>` elements with descriptive `aria-label` attributes instead of plain click handlers on inline elements.
