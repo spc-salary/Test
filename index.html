@@ -59,9 +59,19 @@
             transition: all 0.2s ease;
         }
 
+        button:hover {
+            color: var(--accent);
+        }
+
         button:active {
             box-shadow: inset 4px 4px 8px var(--shadow), inset -4px -4px 8px var(--light);
             color: var(--accent);
+        }
+
+        button:focus-visible,
+        .task-input:focus-visible {
+            outline: 2px solid var(--accent);
+            outline-offset: 3px;
         }
 
         .task-input {
@@ -93,6 +103,23 @@
             color: #555;
             display: flex;
             justify-content: space-between;
+            align-items: center;
+        }
+
+        .task-delete-btn {
+            background: none;
+            border: none;
+            box-shadow: none;
+            padding: 2px 6px;
+            font-size: 0.9rem;
+            line-height: 1;
+            color: #888;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+
+        .task-delete-btn:hover {
+            color: #e63946;
         }
 
         .working { --bg: #f0e4e4; }
@@ -102,13 +129,13 @@
 
     <div class="container" id="app">
         <div style="font-size: 0.8rem; letter-spacing: .2px; color: #888;">FOCUS FLOW</div>
-        <div id="timer-display">25:00</div>
+        <div id="timer-display" role="timer" aria-label="Pomodoro countdown timer">25:00</div>
         <div id="controls">
-            <button id="start">Start</button>
-            <button id="reset">Reset</button>
+            <button id="start" aria-label="Start timer">Start</button>
+            <button id="reset" aria-label="Reset timer">Reset</button>
         </div>
-        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?">
-        <ul id="task-list"></ul>
+        <input type="text" id="task-input" class="task-input" placeholder="What are we doing?" aria-label="Add a task">
+        <ul id="task-list" aria-label="Task list"></ul>
     </div>
 
     <script>
@@ -130,9 +157,11 @@
                 clearInterval(timerId);
                 timerId = null;
                 startBtn.textContent = 'Start';
+                startBtn.setAttribute('aria-label', 'Start timer');
                 document.body.classList.remove('working');
             } else {
                 startBtn.textContent = 'Pause';
+                startBtn.setAttribute('aria-label', 'Pause timer');
                 document.body.classList.add('working');
                 timerId = setInterval(() => {
                     timeLeft--;
@@ -150,15 +179,25 @@
             timerId = null;
             timeLeft = 25 * 60;
             startBtn.textContent = 'Start';
+            startBtn.setAttribute('aria-label', 'Start timer');
             document.body.classList.remove('working');
             updateDisplay();
         });
 
         taskInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter' && taskInput.value.trim() !== "") {
+            const taskText = taskInput.value.trim();
+            if (e.key === 'Enter' && taskText !== "") {
                 const li = document.createElement('li');
                 li.className = 'task-item';
-                li.innerHTML = `<span>${taskInput.value}</span><span style="cursor: pointer" onclick="this.parentElement.remove()">x</span>`;
+                const span = document.createElement('span');
+                span.textContent = taskText;
+                const delBtn = document.createElement('button');
+                delBtn.className = 'task-delete-btn';
+                delBtn.textContent = '×';
+                delBtn.setAttribute('aria-label', `Delete task: ${taskText}`);
+                delBtn.addEventListener('click', () => li.remove());
+                li.appendChild(span);
+                li.appendChild(delBtn);
                 taskList.appendChild(li);
                 taskInput.value = "";
             }
